@@ -7,11 +7,26 @@ SnowMainWnd::SnowMainWnd(QWidget *parent) :
     ui(new Ui::SnowMainWnd)
 {
     ui->setupUi(this);
+    this->ui->tabWidget->setCurrentIndex(0);
 }
 
 SnowMainWnd::~SnowMainWnd()
 {
     delete ui;
+}
+
+ConfigContainer SnowMainWnd::loadGlobalConfig()
+{
+    DBCONFIG dbConfig;
+    dbConfig.setDbServerAddrress(this->ui->lineEdit_DbUrl->text());
+    dbConfig.setDbDatabaseName(this->ui->lineEdit_DbName->text());
+    dbConfig.setDbUsername(this->ui->lineEdit_DbUser->text());
+    dbConfig.setDbPassword(this->ui->lineEdit_DbPassword->text());
+    FILEPATHCONFIG filePathConfig;
+    filePathConfig.setPathGtfFile(this->ui->lineEdit_Source_Gtf->text());
+    filePathConfig.setPathMsAlignFile(this->ui->lineEdit_Source_MsAlign->text());
+    filePathConfig.setPathCsvFile(this->ui->lineEdit_Source_Csv->text());
+    return ConfigContainer(dbConfig, filePathConfig);
 }
 
 void SnowMainWnd::on_pushButton_Db_Next_clicked()
@@ -42,5 +57,28 @@ void SnowMainWnd::on_toolButton_Source_Csv_clicked()
 
 void SnowMainWnd::on_pushButton_Source_Start_clicked()
 {
+    ConfigContainer globalConfig =
+            this->loadGlobalConfig();
+    this->workerThread = new WorkerThread(
+                globalConfig,
+                this->ui->textEdit_ProgressPanel,
+                this
+            );
+    QObject::connect(
+                this->workerThread, SIGNAL(finished()),
+                this, SLOT(onWorkerThreadFinished())
+            );
 
+    this->ui->pushButton_Db_Next->setDisabled(true);
+    this->ui->pushButton_Source_Start->setDisabled(true);
+    this->ui->tabWidget->setCurrentIndex(2);
+    this->workerThread->start();
+}
+
+void SnowMainWnd::onWorkerThreadFinished()
+{
+    this->ui->pushButton_Db_Next->setDisabled(false);
+    this->ui->pushButton_Source_Start->setDisabled(false);
+    this->workerThread->deleteLater();
+    this->workerThread = Q_NULLPTR;
 }

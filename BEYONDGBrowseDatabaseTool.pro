@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,11 +25,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        configcontainer.cpp \
+        databasemanager.cpp \
         main.cpp \
-        snowmainwnd.cpp
+        snowmainwnd.cpp \
+        workerthread.cpp
 
 HEADERS += \
-        snowmainwnd.h
+        configcontainer.h \
+        databasemanager.h \
+        snowmainwnd.h \
+        workerthread.h
 
 FORMS += \
         snowmainwnd.ui

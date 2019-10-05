@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -258,7 +258,7 @@
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_6">
        <item>
-        <widget class="QTextEdit" name="textEdit">
+        <widget class="QTextEdit" name="textEdit_ProgressPanel">
          <property name="readOnly">
           <bool>true</bool>
          </property>
@@ -271,6 +271,23 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>comboBox</tabstop>
+  <tabstop>lineEdit_DbUrl</tabstop>
+  <tabstop>lineEdit_DbName</tabstop>
+  <tabstop>lineEdit_DbUser</tabstop>
+  <tabstop>lineEdit_DbPassword</tabstop>
+  <tabstop>pushButton_Db_Next</tabstop>
+  <tabstop>lineEdit_Source_Gtf</tabstop>
+  <tabstop>lineEdit_Source_MsAlign</tabstop>
+  <tabstop>lineEdit_Source_Csv</tabstop>
+  <tabstop>toolButton_Source_Gtf</tabstop>
+  <tabstop>toolButton_Source_MsAlign</tabstop>
+  <tabstop>toolButton_Source_Csv</tabstop>
+  <tabstop>pushButton_Source_Start</tabstop>
+  <tabstop>textEdit_ProgressPanel</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
