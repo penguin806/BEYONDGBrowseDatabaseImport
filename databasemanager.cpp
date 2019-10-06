@@ -93,12 +93,12 @@ bool DatabaseManager::initDatabaseTables()
     sqlQuery.exec("DROP TABLE IF EXISTS `protein_sequence`");
     sqlQuery.exec(
                 "CREATE TABLE IF NOT EXISTS `protein_sequence` (\
-                `Data file name` varchar(21) DEFAULT NULL,\
+                `Data file name` varchar(256) DEFAULT NULL,\
                 `Scan(s)` int(4) DEFAULT NULL,\
-                `Proteoform ID` int(3) DEFAULT NULL,\
-                `Protein accession` varchar(11) DEFAULT NULL,\
-                `Protein description` varchar(72) DEFAULT NULL,\
-                `Proteoform` varchar(193) DEFAULT NULL\
+                `Proteoform ID` int(4) DEFAULT NULL,\
+                `Protein accession` varchar(32) DEFAULT NULL,\
+                `Protein description` varchar(256) DEFAULT NULL,\
+                `Proteoform` varchar(512) DEFAULT NULL\
               ) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
     );
 
@@ -172,5 +172,29 @@ void DatabaseManager::insertMsAlignRecord(QString fileOneLine)
 
 void DatabaseManager::insertCsvRecord(QString fileOneLine)
 {
+    QStringList oneLineColumns = fileOneLine.split(',', QString::SkipEmptyParts);
+    if(oneLineColumns.size() != 26)
+    {
+        throw QString("Fields not equal to 26, file format invalid");
+    }
 
+    QSqlQuery sqlQuery(this->getDatabaseConnection());
+    sqlQuery.prepare(
+                "INSERT INTO `protein_sequence` "
+                "(`Data file name`, `Scan(s)`, `Proteoform ID`, `Protein accession`, `Protein description`, `Proteoform`) "
+                "VALUES (:Data_file_name, :Scans, :Proteoform_ID, :Protein_accession, :Protein_description, :Proteoform)"
+            );
+    sqlQuery.bindValue(":Data_file_name", oneLineColumns.at(0));
+    sqlQuery.bindValue(":Scans", oneLineColumns.at(4).toInt());
+    sqlQuery.bindValue(":Proteoform_ID", oneLineColumns.at(10).toInt());
+    sqlQuery.bindValue(":Protein_accession", oneLineColumns.at(12));
+    sqlQuery.bindValue(":Protein_description", oneLineColumns.at(13));
+    sqlQuery.bindValue(":Proteoform", oneLineColumns.at(16));
+
+    bool bResult = sqlQuery.exec();
+    if(false == bResult || sqlQuery.numRowsAffected() != 1)
+    {
+        throw QString("statement execute failed (") +
+                sqlQuery.lastError().text() + ")";
+    }
 }
