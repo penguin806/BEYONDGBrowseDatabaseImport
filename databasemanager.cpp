@@ -187,7 +187,8 @@ void DatabaseManager::insertCsvRecord(QString fileOneLine)
     sqlQuery.bindValue(":Data_file_name", oneLineColumns.at(0));
     sqlQuery.bindValue(":Scans", oneLineColumns.at(4).toInt());
     sqlQuery.bindValue(":Proteoform_ID", oneLineColumns.at(10).toInt());
-    sqlQuery.bindValue(":Protein_accession", oneLineColumns.at(12));
+    sqlQuery.bindValue(":Protein_accession", oneLineColumns.at(12)
+                       .split('|',QString::SkipEmptyParts).last());
     sqlQuery.bindValue(":Protein_description", oneLineColumns.at(13));
     sqlQuery.bindValue(":Proteoform", oneLineColumns.at(16));
 
