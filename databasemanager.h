@@ -14,6 +14,8 @@ public:
 
     bool initDatabaseTables();
     void insertGtfRecord(QString fileOneLine);
+    void insertMsAlignRecord(QString fileOneLine);
+    void insertCsvRecord(QString fileOneLine);
 
 private:
     QObject *parentObject;

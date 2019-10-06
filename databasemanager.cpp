@@ -145,3 +145,32 @@ void DatabaseManager::insertGtfRecord(QString fileOneLine)
         throw QString("statement execute failed");
     }
 }
+
+void DatabaseManager::insertMsAlignRecord(QString fileOneLine)
+{
+    QStringList oneLineColumns = fileOneLine.split(',', QString::SkipEmptyParts);
+    if(oneLineColumns.size() != 2)
+    {
+        throw QString("Fields not equal to 2, file format invalid");
+    }
+
+    QSqlQuery sqlQuery(this->getDatabaseConnection());
+    sqlQuery.prepare(
+                "INSERT INTO `protein_scan` "
+                "(`scan_id`, `ions`) "
+                "VALUES (:scan_id, :ions)"
+            );
+    sqlQuery.bindValue(":scan_id", oneLineColumns.at(0).toInt());
+    sqlQuery.bindValue(":ions", oneLineColumns.at(1));
+
+    bool bResult = sqlQuery.exec();
+    if(false == bResult || sqlQuery.numRowsAffected() != 1)
+    {
+        throw QString("statement execute failed");
+    }
+}
+
+void DatabaseManager::insertCsvRecord(QString fileOneLine)
+{
+
+}

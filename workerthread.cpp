@@ -46,6 +46,9 @@ void WorkerThread::run()
     if(bResult)
     {
         this->printProgress("[Info] Database table initialization success!");
+        this->processGtfFile();
+        this->processMsAlignFile();
+        this->processCsvFile();
     }
     else
     {
@@ -54,8 +57,6 @@ void WorkerThread::run()
                     this->dbManager->getDatabaseConnection().lastError().text()
                 );
     }
-
-    this->processGtfFile();
 
     this->dbManager->closeDatabaseConnection();
 }
@@ -127,7 +128,67 @@ void WorkerThread::processGtfFile()
 
 void WorkerThread::processMsAlignFile()
 {
+    QFile inputMsAlignFile(this->globalConfig.getFilePath().getPathMsAlignFile());
+    if( !inputMsAlignFile.open(QFile::ReadOnly) )
+    {
+        this->printProgress(
+                    "[Error] Unable to open file: " +
+                    inputMsAlignFile.fileName() +
+                    " Reason: " + inputMsAlignFile.errorString()
+                );
+        return;
+    }
+    else
+    {
+        this->printProgress(
+                    "[Info] Open input file <" +
+                    inputMsAlignFile.fileName() + "> Success!"
+                );
+    }
 
+    QTextStream inputFileStream(&inputMsAlignFile);
+    QString stringBuffer;
+    qint32 loopCounts = 0;
+
+    // Fetch each line from the inputFile, insert into database
+    this->dbManager->getDatabaseConnection().transaction();
+    while(inputFileStream.readLineInto(&stringBuffer))
+    {
+        loopCounts++;
+        //Eg: 9,520.45185~6838.14;502.09961~52.29;
+
+        try
+        {
+            this->dbManager->insertMsAlignRecord(stringBuffer);
+        } catch (QString errorMsg)
+        {
+            this->printProgress(
+                        "[Error] Insert the " +
+                        QString::number(loopCounts) +
+                        "th record <" + stringBuffer + "> failed: " + errorMsg
+                    );
+            if(this->dbManager->getDatabaseConnection().lastError().isValid())
+            {
+                this->printProgress(
+                            "[Error] " + this->dbManager->getDatabaseConnection().lastError().text()
+                        );
+            }
+            this->dbManager->getDatabaseConnection().rollback();
+            return;
+        }
+
+        if( 0 == loopCounts % 200)
+        {
+            this->printProgress(
+                        "[Info] Processing the " +
+                        QString::number(loopCounts) +
+                        "th line: " + stringBuffer.left(10)
+                    );
+        }
+    }
+    this->dbManager->getDatabaseConnection().commit();
+    this->printProgress("[Info] Parse file <" + inputMsAlignFile.fileName()
+                        + "> and insert into db success!");
 }
 
 void WorkerThread::processCsvFile()
