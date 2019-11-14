@@ -63,7 +63,7 @@ bool DatabaseManager::initDatabaseTables()
                   `ensembl_id` varchar(45) NOT NULL,\
                   `uniprot_id` varchar(45) DEFAULT NULL,\
                   PRIMARY KEY (`name`,`start`,`end`,`ensembl_id`)\
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
+                ) ENGINE=MyISAM DEFAULT CHARSET=utf8;"
     );
 
     // Online protein&proteoform annotation
@@ -77,7 +77,7 @@ bool DatabaseManager::initDatabaseTables()
                 `contents` text NOT NULL,\
                 PRIMARY KEY (`id`),\
                 UNIQUE KEY `name` (`name`,`position`,`time`)\
-              ) ENGINE=MyISAM AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;"
+              ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;"
     );
 
     // MsAlign
@@ -86,6 +86,7 @@ bool DatabaseManager::initDatabaseTables()
                 "CREATE TABLE IF NOT EXISTS `protein_scan` (\
                 `scan_id` int(4) DEFAULT NULL,\
                 `ions` varchar(6497) DEFAULT NULL\
+                PRIMARY KEY (`scan_id`)\
               ) ENGINE=MyISAM DEFAULT CHARSET=utf8;"
     );
 
@@ -99,7 +100,8 @@ bool DatabaseManager::initDatabaseTables()
                 `Protein accession` varchar(32) DEFAULT NULL,\
                 `Protein description` varchar(256) DEFAULT NULL,\
                 `Proteoform` varchar(512) DEFAULT NULL\
-              ) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
+                PRIMARY KEY (`Scan(s)`)\
+              ) ENGINE=MyISAM DEFAULT CHARSET=utf8;"
     );
 
     if(sqlQuery.lastError().isValid())
