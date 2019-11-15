@@ -26,7 +26,9 @@ ConfigContainer SnowMainWnd::loadGlobalConfig()
     filePathConfig.setPathGtfFile(this->ui->lineEdit_Source_Gtf->text());
     filePathConfig.setPathMsAlignFile(this->ui->lineEdit_Source_MsAlign->text());
     filePathConfig.setPathCsvFile(this->ui->lineEdit_Source_Csv->text());
-    return ConfigContainer(dbConfig, filePathConfig);
+    QString datasetName = this->ui->lineEdit_Source_Dataset->text();
+
+    return ConfigContainer(dbConfig, filePathConfig, datasetName);
 }
 
 void SnowMainWnd::on_pushButton_Db_Next_clicked()

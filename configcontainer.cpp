@@ -5,16 +5,17 @@ ConfigContainer::ConfigContainer()
 
 }
 
-ConfigContainer::ConfigContainer(DBCONFIG dbConfig, FILEPATHCONFIG filePathConfig)
+ConfigContainer::ConfigContainer(DBCONFIG dbConfig, FILEPATHCONFIG filePathConfig, QString datasetName)
 {
     this->setDbConfig(dbConfig);
     this->setFilePath(filePathConfig);
+    this->setDatasetName(datasetName);
 }
 
 ConfigContainer::ConfigContainer(
         QString dbServerAddrress, QString dbDatabaseName, QString dbUsername,
         QString dbPassword, QString pathGtfFile, QString pathMsAlignFile,
-        QString pathCsvFile
+        QString pathCsvFile, QString datasetName
 )
 {
     DBCONFIG dbConfig;
@@ -30,6 +31,7 @@ ConfigContainer::ConfigContainer(
 
     this->setDbConfig(dbConfig);
     this->setFilePath(filePathConfig);
+    this->setDatasetName(datasetName);
 }
 
 DBCONFIG ConfigContainer::getDbConfig() const
@@ -50,6 +52,16 @@ FILEPATHCONFIG ConfigContainer::getFilePath() const
 void ConfigContainer::setFilePath(const FILEPATHCONFIG &value)
 {
     filePath = value;
+}
+
+QString ConfigContainer::getDatasetName() const
+{
+    return datasetName;
+}
+
+void ConfigContainer::setDatasetName(const QString &value)
+{
+    datasetName = value;
 }
 
 
