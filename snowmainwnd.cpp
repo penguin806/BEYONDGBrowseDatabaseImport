@@ -30,7 +30,10 @@ void SnowMainWnd::loadGlobalConfig()
     filePathConfig.setPathCsvFile(this->ui->lineEdit_Source_Csv->text());
 
     QString datasetId;
-    if(this->ui->listWidget_Source_Dataset->count() > 0)
+    if(
+        this->ui->listWidget_Source_Dataset->count() > 0 &&
+        this->ui->listWidget_Source_Dataset->currentItem()
+    )
     {
         QStringList datasetIdAndNameFields =
                 this->ui->listWidget_Source_Dataset->currentItem()
@@ -168,6 +171,7 @@ void SnowMainWnd::on_toolButton_Source_addNewDataset_clicked()
         }
     }
 
+    dbManager.initDatabaseTables();
     try
     {
         dbManager.insertNewDatasetRecord(newDatasetName);

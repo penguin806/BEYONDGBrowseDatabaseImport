@@ -98,8 +98,8 @@ bool DatabaseManager::initDatabaseTables()
     sqlQuery.exec(
                "CREATE TABLE IF NOT EXISTS `protein_scan` (\
                 `dataset_id` int(11) NOT NULL,\
-                `scan_id` int(4) DEFAULT NULL,\
-                `ions` varchar(6497) DEFAULT NULL\
+                `scan_id` int(4) NOT NULL,\
+                `ions` varchar(6497) DEFAULT NULL,\
                 PRIMARY KEY (`dataset_id`,`scan_id`)\
               ) ENGINE=MyISAM DEFAULT CHARSET=utf8;"
     );
@@ -110,11 +110,11 @@ bool DatabaseManager::initDatabaseTables()
                "CREATE TABLE IF NOT EXISTS `protein_sequence` (\
                 `dataset_id` int(11) NOT NULL,\
                 `Data file name` varchar(256) DEFAULT NULL,\
-                `Scan(s)` int(4) DEFAULT NULL,\
+                `Scan(s)` int(4) NOT NULL,\
                 `Proteoform ID` int(4) DEFAULT NULL,\
                 `Protein accession` varchar(32) DEFAULT NULL,\
                 `Protein description` varchar(256) DEFAULT NULL,\
-                `Proteoform` varchar(512) DEFAULT NULL\
+                `Proteoform` varchar(512) DEFAULT NULL,\
                 PRIMARY KEY (`dataset_id`,`Scan(s)`)\
               ) ENGINE=MyISAM DEFAULT CHARSET=utf8;"
     );
@@ -122,14 +122,12 @@ bool DatabaseManager::initDatabaseTables()
     if(sqlQuery.lastError().isValid())
     {
         qDebug() << sqlQuery.lastError().text();
-        this->getDatabaseConnection().rollback();
-        return false;
+//        this->getDatabaseConnection().rollback();
+//        return false;
     }
-    else
-    {
-        this->getDatabaseConnection().commit();
-        return true;
-    }
+
+    this->getDatabaseConnection().commit();
+    return true;
 }
 
 void DatabaseManager::insertGtfRecord(QString fileOneLine, QString datasetId)

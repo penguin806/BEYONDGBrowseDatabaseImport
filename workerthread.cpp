@@ -46,9 +46,16 @@ void WorkerThread::run()
     if(bResult)
     {
         this->printProgress("[Info] Database table initialization success!");
-        this->processGtfFile();
-        this->processMsAlignFile();
-        this->processCsvFile();
+        if(!this->globalConfig.getDatasetId().isEmpty())
+        {
+            this->processGtfFile();
+            this->processMsAlignFile();
+            this->processCsvFile();
+        }
+        else
+        {
+            this->printProgress("[Error] DatabaseId is null!");
+        }
     }
     else
     {
