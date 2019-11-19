@@ -100,6 +100,20 @@ void SnowMainWnd::on_toolButton_Source_Csv_clicked()
 void SnowMainWnd::on_pushButton_Source_Start_clicked()
 {
     this->loadGlobalConfig();
+    QString confirmText =
+            QString("Please confirm the source configuration:\n") +
+            QString("Dataset: ") + this->globalConfig.getDatasetName() + '\n' +
+            QString("GtfPath: ") + this->globalConfig.getFilePath().getPathGtfFile() + '\n' +
+            QString("MsAlignPath: ") + this->globalConfig.getFilePath().getPathMsAlignFile() + '\n' +
+            QString("CsvPath: ") + this->globalConfig.getFilePath().getPathCsvFile();
+    QMessageBox::StandardButtons selectedButton = QMessageBox::question(
+                this, "Info", confirmText,
+                QMessageBox::Ok, QMessageBox::Cancel
+            );
+    if(selectedButton != QMessageBox::Ok)
+    {
+        return;
+    }
 
     this->workerThread = new WorkerThread(
                 this->globalConfig,
