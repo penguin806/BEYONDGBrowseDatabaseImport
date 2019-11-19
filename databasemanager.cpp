@@ -52,55 +52,70 @@ bool DatabaseManager::initDatabaseTables()
     this->getDatabaseConnection().transaction();
     QSqlQuery sqlQuery(this->getDatabaseConnection());
 
+    // Dataset Catalog
+    // sqlQuery.exec("DROP TABLE IF EXISTS `dataset_catalog`;");
+    sqlQuery.exec(
+                "CREATE TABLE IF NOT EXISTS `dataset_catalog` (\
+                `id` int(11) NOT NULL AUTO_INCREMENT,\
+                `dataset_name` varchar(64) NOT NULL,\
+                PRIMARY KEY (`id`),\
+                UNIQUE KEY `dataset_name` (`dataset_name`)\
+              ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;"
+    );
+
     // Gtf
-    sqlQuery.exec("DROP TABLE IF EXISTS `protein_annotation`");
+    // sqlQuery.exec("DROP TABLE IF EXISTS `protein_annotation`");
     sqlQuery.exec(
                 "CREATE TABLE IF NOT EXISTS `protein_annotation` (\
+                  `dataset_id` int(11) NOT NULL,\
                   `name` varchar(10) NOT NULL,\
                   `start` int(11) NOT NULL,\
                   `end` int(11) NOT NULL,\
                   `strand` char(1) NOT NULL,\
                   `ensembl_id` varchar(45) NOT NULL,\
                   `uniprot_id` varchar(45) DEFAULT NULL,\
-                  PRIMARY KEY (`name`,`start`,`end`,`ensembl_id`)\
+                  PRIMARY KEY (`dataset_id`,`name`,`start`,`end`,`ensembl_id`)\
                 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;"
     );
 
     // Online protein&proteoform annotation
-    sqlQuery.exec("DROP TABLE IF EXISTS `protein_comments`");
+    // sqlQuery.exec("DROP TABLE IF EXISTS `protein_comments`");
     sqlQuery.exec(
-                "CREATE TABLE IF NOT EXISTS `protein_comments` (\
+               "CREATE TABLE IF NOT EXISTS `protein_comments` (\
+                `dataset_id` int(11) NOT NULL,\
                 `id` int(11) NOT NULL AUTO_INCREMENT,\
                 `name` varchar(10) NOT NULL,\
                 `position` int(11) NOT NULL,\
                 `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,\
                 `contents` text NOT NULL,\
                 PRIMARY KEY (`id`),\
-                UNIQUE KEY `name` (`name`,`position`,`time`)\
+                UNIQUE KEY `dataset_id` (`dataset_id`,`name`,`position`,`time`)\
               ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;"
     );
 
     // MsAlign
-    sqlQuery.exec("DROP TABLE IF EXISTS `protein_scan`");
+    // sqlQuery.exec("DROP TABLE IF EXISTS `protein_scan`");
     sqlQuery.exec(
-                "CREATE TABLE IF NOT EXISTS `protein_scan` (\
+               "CREATE TABLE IF NOT EXISTS `protein_scan` (\
+                `dataset_id` int(11) NOT NULL,\
                 `scan_id` int(4) DEFAULT NULL,\
                 `ions` varchar(6497) DEFAULT NULL\
-                PRIMARY KEY (`scan_id`)\
+                PRIMARY KEY (`dataset_id`,`scan_id`)\
               ) ENGINE=MyISAM DEFAULT CHARSET=utf8;"
     );
 
     // Csv
-    sqlQuery.exec("DROP TABLE IF EXISTS `protein_sequence`");
+    // sqlQuery.exec("DROP TABLE IF EXISTS `protein_sequence`");
     sqlQuery.exec(
-                "CREATE TABLE IF NOT EXISTS `protein_sequence` (\
+               "CREATE TABLE IF NOT EXISTS `protein_sequence` (\
+                `dataset_id` int(11) NOT NULL,\
                 `Data file name` varchar(256) DEFAULT NULL,\
                 `Scan(s)` int(4) DEFAULT NULL,\
                 `Proteoform ID` int(4) DEFAULT NULL,\
                 `Protein accession` varchar(32) DEFAULT NULL,\
                 `Protein description` varchar(256) DEFAULT NULL,\
                 `Proteoform` varchar(512) DEFAULT NULL\
-                PRIMARY KEY (`Scan(s)`)\
+                PRIMARY KEY (`dataset_id`,`Scan(s)`)\
               ) ENGINE=MyISAM DEFAULT CHARSET=utf8;"
     );
 
