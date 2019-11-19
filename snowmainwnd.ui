@@ -141,46 +141,16 @@
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_13">
-           <property name="font">
-            <font>
-             <pointsize>9</pointsize>
-            </font>
-           </property>
+         <item row="0" column="1">
+          <widget class="QListWidget" name="listWidget_Source_Dataset"/>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="lineEdit_Source_MsAlign"/>
+         </item>
+         <item row="5" column="0" colspan="3">
+          <widget class="QPushButton" name="pushButton_Source_Start">
            <property name="text">
-            <string>Dataset:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1" colspan="2">
-          <widget class="QLineEdit" name="lineEdit_Source_Dataset"/>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_12">
-           <property name="font">
-            <font>
-             <pointsize>9</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Gtf:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="lineEdit_Source_Gtf"/>
-         </item>
-         <item row="1" column="2">
-          <widget class="QToolButton" name="toolButton_Source_Gtf">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>...</string>
+            <string>Start</string>
            </property>
           </widget>
          </item>
@@ -196,19 +166,15 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="lineEdit_Source_MsAlign"/>
-         </item>
-         <item row="2" column="2">
-          <widget class="QToolButton" name="toolButton_Source_MsAlign">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_13">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
            </property>
            <property name="text">
-            <string>...</string>
+            <string>Dataset:</string>
            </property>
           </widget>
          </item>
@@ -224,11 +190,71 @@
            </property>
           </widget>
          </item>
+         <item row="3" column="2">
+          <widget class="QToolButton" name="toolButton_Source_Csv">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_12">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Gtf:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QToolButton" name="toolButton_Source_addNewDataset">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>+</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="lineEdit_Source_Gtf"/>
+         </item>
+         <item row="2" column="2">
+          <widget class="QToolButton" name="toolButton_Source_MsAlign">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
          <item row="3" column="1">
           <widget class="QLineEdit" name="lineEdit_Source_Csv"/>
          </item>
-         <item row="3" column="2">
-          <widget class="QToolButton" name="toolButton_Source_Csv">
+         <item row="1" column="2">
+          <widget class="QToolButton" name="toolButton_Source_Gtf">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -255,13 +281,6 @@
             </size>
            </property>
           </spacer>
-         </item>
-         <item row="5" column="0" colspan="3">
-          <widget class="QPushButton" name="pushButton_Source_Start">
-           <property name="text">
-            <string>Start</string>
-           </property>
-          </widget>
          </item>
         </layout>
        </item>

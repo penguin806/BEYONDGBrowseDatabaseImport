@@ -16,6 +16,8 @@ public:
     void insertGtfRecord(QString fileOneLine);
     void insertMsAlignRecord(QString fileOneLine);
     void insertCsvRecord(QString fileOneLine);
+    QStringList selectDatasetsRecord();
+    void insertNewDatasetRecord(QString newDatasetName);
 
 private:
     QObject *parentObject;

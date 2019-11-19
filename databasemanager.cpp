@@ -201,3 +201,37 @@ void DatabaseManager::insertCsvRecord(QString fileOneLine)
                 sqlQuery.lastError().text() + ")";
     }
 }
+
+QStringList DatabaseManager::selectDatasetsRecord()
+{
+    QSqlQuery sqlQuery(this->getDatabaseConnection());
+    QStringList datasetsNameList;
+    bool bQueryResult = sqlQuery.exec("SELECT `id`, `dataset_name` FROM `dataset_catalog`");
+    while(sqlQuery.next())
+    {
+        QString oneRowRecord =
+                sqlQuery.value("id").toString() +
+                QString("# ") +
+                sqlQuery.value("dataset_name").toString();
+        datasetsNameList.append(oneRowRecord);
+    }
+
+    return datasetsNameList;
+}
+
+void DatabaseManager::insertNewDatasetRecord(QString newDatasetName)
+{
+    QSqlQuery sqlQuery(this->getDatabaseConnection());
+    sqlQuery.prepare(
+                "INSERT INTO `dataset_catalog`(`dataset_name`) "
+                "VALUES (:dataset_name)"
+            );
+    sqlQuery.bindValue(":dataset_name", newDatasetName);
+
+    bool bResult = sqlQuery.exec();
+    if(false == bResult || sqlQuery.numRowsAffected() != 1)
+    {
+        throw QString("Statement execute failed (") +
+                sqlQuery.lastError().text() + ")";
+    }
+}

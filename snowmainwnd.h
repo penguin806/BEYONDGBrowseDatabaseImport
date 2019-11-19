@@ -16,7 +16,10 @@ class SnowMainWnd : public QDialog
 public:
     explicit SnowMainWnd(QWidget *parent = nullptr);
     ~SnowMainWnd();
-    ConfigContainer loadGlobalConfig();
+
+protected:
+    void loadGlobalConfig();
+    bool loadDatasetListFromDatabase();
 
 private slots:
     void on_pushButton_Db_Next_clicked();
@@ -26,8 +29,11 @@ private slots:
     void on_pushButton_Source_Start_clicked();
     void onWorkerThreadFinished();
 
+    void on_toolButton_Source_addNewDataset_clicked();
+
 private:
     Ui::SnowMainWnd *ui;
+    ConfigContainer globalConfig;
     WorkerThread *workerThread;
 };
 

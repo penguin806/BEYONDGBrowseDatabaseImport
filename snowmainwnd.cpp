@@ -1,6 +1,8 @@
 #include "snowmainwnd.h"
 #include "ui_snowmainwnd.h"
 #include <QFileDialog>
+#include <QMessageBox>
+#include <QInputDialog>
 
 SnowMainWnd::SnowMainWnd(QWidget *parent) :
     QDialog(parent),
@@ -15,7 +17,7 @@ SnowMainWnd::~SnowMainWnd()
     delete ui;
 }
 
-ConfigContainer SnowMainWnd::loadGlobalConfig()
+void SnowMainWnd::loadGlobalConfig()
 {
     DBCONFIG dbConfig;
     dbConfig.setDbServerAddrress(this->ui->lineEdit_DbUrl->text());
@@ -26,14 +28,52 @@ ConfigContainer SnowMainWnd::loadGlobalConfig()
     filePathConfig.setPathGtfFile(this->ui->lineEdit_Source_Gtf->text());
     filePathConfig.setPathMsAlignFile(this->ui->lineEdit_Source_MsAlign->text());
     filePathConfig.setPathCsvFile(this->ui->lineEdit_Source_Csv->text());
-    QString datasetName = this->ui->lineEdit_Source_Dataset->text();
 
-    return ConfigContainer(dbConfig, filePathConfig, datasetName);
+    QString datasetName;
+    if(this->ui->listWidget_Source_Dataset->count() > 0)
+    {
+        QStringList datasetIdAndNameFields =
+                this->ui->listWidget_Source_Dataset->currentItem()
+                ->text().split("# ", QString::SkipEmptyParts);
+        if(datasetIdAndNameFields.length() == 2)
+        {
+            datasetName = datasetIdAndNameFields.at(1);
+        }
+    }
+
+    this->globalConfig =
+            ConfigContainer(dbConfig, filePathConfig, datasetName);
+}
+
+bool SnowMainWnd::loadDatasetListFromDatabase()
+{
+    this->ui->listWidget_Source_Dataset->clear();
+    DatabaseManager dbManager(this);
+    bool bResult;
+    try {
+        bResult = dbManager.connectingToDatabase(this->globalConfig.getDbConfig());
+    } catch (QString message) {
+        QMessageBox::critical(this, "Error", message);
+        return false;
+    }
+
+    if(true == bResult)
+    {
+        QStringList datasetsList =
+                dbManager.selectDatasetsRecord();
+        this->ui->listWidget_Source_Dataset->addItems(datasetsList);
+    }
+    return true;
 }
 
 void SnowMainWnd::on_pushButton_Db_Next_clicked()
 {
-    this->ui->tabWidget->setCurrentIndex(1);
+    this->loadGlobalConfig();
+    bool bResult = this->loadDatasetListFromDatabase();
+    if(bResult)
+    {
+        this->ui->tabWidget->setCurrentIndex(1);
+    }
 }
 
 void SnowMainWnd::on_toolButton_Source_Gtf_clicked()
@@ -59,10 +99,10 @@ void SnowMainWnd::on_toolButton_Source_Csv_clicked()
 
 void SnowMainWnd::on_pushButton_Source_Start_clicked()
 {
-    ConfigContainer globalConfig =
-            this->loadGlobalConfig();
+    this->loadGlobalConfig();
+
     this->workerThread = new WorkerThread(
-                globalConfig,
+                this->globalConfig,
                 this->ui->textEdit_ProgressPanel,
                 this
             );
@@ -83,4 +123,45 @@ void SnowMainWnd::onWorkerThreadFinished()
     this->ui->pushButton_Source_Start->setDisabled(false);
     this->workerThread->deleteLater();
     this->workerThread = Q_NULLPTR;
+}
+
+void SnowMainWnd::on_toolButton_Source_addNewDataset_clicked()
+{
+    bool bNewDatasetNameOk;
+    QString newDatasetName =
+        QInputDialog::getText(
+                    this,
+                    "Dataset Add",
+                    "Enter the new dataset name:",
+                    QLineEdit::Normal,
+                    QString(),
+                    &bNewDatasetNameOk
+                );
+    if(!bNewDatasetNameOk || newDatasetName.isEmpty())
+    {
+        return;
+    }
+
+    DatabaseManager dbManager(this);
+    if(!dbManager.getDatabaseConnection().isOpen())
+    {
+        bool bResult;
+        try {
+            bResult = dbManager.connectingToDatabase(this->globalConfig.getDbConfig());
+        } catch (QString message) {
+            QMessageBox::critical(this, "Error", message);
+            return;
+        }
+    }
+
+    try
+    {
+        dbManager.insertNewDatasetRecord(newDatasetName);
+    } catch (QString errorMsg)
+    {
+        QMessageBox::critical(this, "Error", errorMsg);
+        return;
+    }
+
+    this->loadDatasetListFromDatabase();
 }
