@@ -13,9 +13,9 @@ public:
     static QSqlDatabase getDatabaseConnection();
 
     bool initDatabaseTables();
-    void insertGtfRecord(QString fileOneLine);
-    void insertMsAlignRecord(QString fileOneLine);
-    void insertCsvRecord(QString fileOneLine);
+    void insertGtfRecord(QString fileOneLine, QString datasetId);
+    void insertMsAlignRecord(QString fileOneLine, QString datasetId);
+    void insertCsvRecord(QString fileOneLine, QString datasetId);
     QStringList selectDatasetsRecord();
     void insertNewDatasetRecord(QString newDatasetName);
 

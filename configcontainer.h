@@ -52,7 +52,7 @@ class ConfigContainer
 {
 public:
     ConfigContainer();
-    ConfigContainer(DBCONFIG dbConfig, FILEPATHCONFIG filePathConfig, QString datasetName);
+    ConfigContainer(DBCONFIG dbConfig, FILEPATHCONFIG filePathConfig, QString datasetId);
     ConfigContainer(
             QString dbServerAddrress,
             QString dbDatabaseName,
@@ -61,7 +61,7 @@ public:
             QString pathGtfFile,
             QString pathMsAlignFile,
             QString pathCsvFile,
-            QString datasetName
+            QString datasetId
     );
 
     DBCONFIG getDbConfig() const;
@@ -70,13 +70,13 @@ public:
     FILEPATHCONFIG getFilePath() const;
     void setFilePath(const FILEPATHCONFIG &value);
 
-    QString getDatasetName() const;
-    void setDatasetName(const QString &value);
+    QString getDatasetId() const;
+    void setDatasetId(const QString &value);
 
 private:
     DBCONFIG dbConfig;
     FILEPATHCONFIG filePath;
-    QString datasetName;
+    QString datasetId;
 };
 
 #endif // CONFIGCONTAINER_H

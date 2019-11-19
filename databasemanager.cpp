@@ -132,7 +132,7 @@ bool DatabaseManager::initDatabaseTables()
     }
 }
 
-void DatabaseManager::insertGtfRecord(QString fileOneLine)
+void DatabaseManager::insertGtfRecord(QString fileOneLine, QString datasetId)
 {
     QStringList oneLineColumns = fileOneLine.split(',', QString::SkipEmptyParts);
     if(oneLineColumns.size() < 5)
@@ -143,9 +143,10 @@ void DatabaseManager::insertGtfRecord(QString fileOneLine)
     QSqlQuery sqlQuery(this->getDatabaseConnection());
     sqlQuery.prepare(
                 "INSERT INTO `protein_annotation` "
-                "(`name`, `start`, `end`, `strand`, `ensembl_id`, `uniprot_id`) "
-                "VALUES (:name, :start, :end, :strand, :ensembl_id, :uniprot_id)"
+                "(`dataset_id`, `name`, `start`, `end`, `strand`, `ensembl_id`, `uniprot_id`) "
+                "VALUES (:dataset_id, :name, :start, :end, :strand, :ensembl_id, :uniprot_id)"
             );
+    sqlQuery.bindValue(":dataset_id", datasetId);
     sqlQuery.bindValue(":name", oneLineColumns.at(0));
     sqlQuery.bindValue(":start", oneLineColumns.at(1).toInt());
     sqlQuery.bindValue(":end", oneLineColumns.at(2).toInt());
@@ -163,7 +164,7 @@ void DatabaseManager::insertGtfRecord(QString fileOneLine)
     }
 }
 
-void DatabaseManager::insertMsAlignRecord(QString fileOneLine)
+void DatabaseManager::insertMsAlignRecord(QString fileOneLine, QString datasetId)
 {
     QStringList oneLineColumns = fileOneLine.split(',', QString::SkipEmptyParts);
     if(oneLineColumns.size() != 2)
@@ -174,9 +175,10 @@ void DatabaseManager::insertMsAlignRecord(QString fileOneLine)
     QSqlQuery sqlQuery(this->getDatabaseConnection());
     sqlQuery.prepare(
                 "INSERT INTO `protein_scan` "
-                "(`scan_id`, `ions`) "
-                "VALUES (:scan_id, :ions)"
+                "(`dataset_id`, `scan_id`, `ions`) "
+                "VALUES (:dataset_id, :scan_id, :ions)"
             );
+    sqlQuery.bindValue(":dataset_id", datasetId);
     sqlQuery.bindValue(":scan_id", oneLineColumns.at(0).toInt());
     sqlQuery.bindValue(":ions", oneLineColumns.at(1));
 
@@ -187,7 +189,7 @@ void DatabaseManager::insertMsAlignRecord(QString fileOneLine)
     }
 }
 
-void DatabaseManager::insertCsvRecord(QString fileOneLine)
+void DatabaseManager::insertCsvRecord(QString fileOneLine, QString datasetId)
 {
     QStringList oneLineColumns = fileOneLine.split(',', QString::SkipEmptyParts);
     if(oneLineColumns.size() != 26)
@@ -198,9 +200,10 @@ void DatabaseManager::insertCsvRecord(QString fileOneLine)
     QSqlQuery sqlQuery(this->getDatabaseConnection());
     sqlQuery.prepare(
                 "INSERT INTO `protein_sequence` "
-                "(`Data file name`, `Scan(s)`, `Proteoform ID`, `Protein accession`, `Protein description`, `Proteoform`) "
-                "VALUES (:Data_file_name, :Scans, :Proteoform_ID, :Protein_accession, :Protein_description, :Proteoform)"
+                "(`dataset_id`, `Data file name`, `Scan(s)`, `Proteoform ID`, `Protein accession`, `Protein description`, `Proteoform`) "
+                "VALUES (:dataset_id, :Data_file_name, :Scans, :Proteoform_ID, :Protein_accession, :Protein_description, :Proteoform)"
             );
+    sqlQuery.bindValue(":dataset_id", datasetId);
     sqlQuery.bindValue(":Data_file_name", oneLineColumns.at(0));
     sqlQuery.bindValue(":Scans", oneLineColumns.at(4).toInt());
     sqlQuery.bindValue(":Proteoform_ID", oneLineColumns.at(10).toInt());

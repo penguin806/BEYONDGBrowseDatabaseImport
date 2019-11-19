@@ -94,7 +94,7 @@ void WorkerThread::processGtfFile()
 
         try
         {
-            this->dbManager->insertGtfRecord(stringBuffer);
+            this->dbManager->insertGtfRecord(stringBuffer, this->globalConfig.getDatasetId());
         } catch (QString errorMsg)
         {
             this->printProgress(
@@ -159,7 +159,7 @@ void WorkerThread::processMsAlignFile()
 
         try
         {
-            this->dbManager->insertMsAlignRecord(stringBuffer);
+            this->dbManager->insertMsAlignRecord(stringBuffer, this->globalConfig.getDatasetId());
         } catch (QString errorMsg)
         {
             this->printProgress(
@@ -239,7 +239,7 @@ void WorkerThread::processCsvFile()
 
         try
         {
-            this->dbManager->insertCsvRecord(stringBuffer);
+            this->dbManager->insertCsvRecord(stringBuffer, this->globalConfig.getDatasetId());
         } catch (QString errorMsg)
         {
             this->printProgress(

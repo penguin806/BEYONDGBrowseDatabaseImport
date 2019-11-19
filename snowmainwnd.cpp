@@ -29,7 +29,7 @@ void SnowMainWnd::loadGlobalConfig()
     filePathConfig.setPathMsAlignFile(this->ui->lineEdit_Source_MsAlign->text());
     filePathConfig.setPathCsvFile(this->ui->lineEdit_Source_Csv->text());
 
-    QString datasetName;
+    QString datasetId;
     if(this->ui->listWidget_Source_Dataset->count() > 0)
     {
         QStringList datasetIdAndNameFields =
@@ -37,12 +37,12 @@ void SnowMainWnd::loadGlobalConfig()
                 ->text().split("# ", QString::SkipEmptyParts);
         if(datasetIdAndNameFields.length() == 2)
         {
-            datasetName = datasetIdAndNameFields.at(1);
+            datasetId = datasetIdAndNameFields.at(0);
         }
     }
 
     this->globalConfig =
-            ConfigContainer(dbConfig, filePathConfig, datasetName);
+            ConfigContainer(dbConfig, filePathConfig, datasetId);
 }
 
 bool SnowMainWnd::loadDatasetListFromDatabase()
@@ -102,7 +102,7 @@ void SnowMainWnd::on_pushButton_Source_Start_clicked()
     this->loadGlobalConfig();
     QString confirmText =
             QString("Please confirm the source configuration:\n") +
-            QString("Dataset: ") + this->globalConfig.getDatasetName() + '\n' +
+            QString("DatasetId: ") + this->globalConfig.getDatasetId() + '\n' +
             QString("GtfPath: ") + this->globalConfig.getFilePath().getPathGtfFile() + '\n' +
             QString("MsAlignPath: ") + this->globalConfig.getFilePath().getPathMsAlignFile() + '\n' +
             QString("CsvPath: ") + this->globalConfig.getFilePath().getPathCsvFile();

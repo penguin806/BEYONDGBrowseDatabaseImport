@@ -9,7 +9,7 @@ ConfigContainer::ConfigContainer(DBCONFIG dbConfig, FILEPATHCONFIG filePathConfi
 {
     this->setDbConfig(dbConfig);
     this->setFilePath(filePathConfig);
-    this->setDatasetName(datasetName);
+    this->setDatasetId(datasetName);
 }
 
 ConfigContainer::ConfigContainer(
@@ -31,7 +31,7 @@ ConfigContainer::ConfigContainer(
 
     this->setDbConfig(dbConfig);
     this->setFilePath(filePathConfig);
-    this->setDatasetName(datasetName);
+    this->setDatasetId(datasetName);
 }
 
 DBCONFIG ConfigContainer::getDbConfig() const
@@ -54,14 +54,14 @@ void ConfigContainer::setFilePath(const FILEPATHCONFIG &value)
     filePath = value;
 }
 
-QString ConfigContainer::getDatasetName() const
+QString ConfigContainer::getDatasetId() const
 {
-    return datasetName;
+    return datasetId;
 }
 
-void ConfigContainer::setDatasetName(const QString &value)
+void ConfigContainer::setDatasetId(const QString &value)
 {
-    datasetName = value;
+    datasetId = value;
 }
 
 
